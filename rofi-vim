@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+#
+#   Usage:
+#     1. Download Vim cheat sheet 
+#        $ rofi-vim --download
+#
+#     2. Run it!
+#        $ rofi-vim
+#
+
+# Where to save the cheat sheet.
+VIM_FILE="$HOME/.cache/vimcheat.txt"
+
+# Urls of cheat sheet to download.
+# You can remove what you don't need.
+URLS=(
+    'https://raw.githubusercontent.com/rdvm/rofi-vim/master/vimcheat'
+)
+
+
+function notify() {
+    if [ "$(command -v notify-send)" ]; then
+        notify-send "$1" "$2"
+    fi
+}
+
+
+function download() {
+    notify `basename "$0"` 'Downloading Vim cheat sheet'
+
+    echo "" > "$VIM_FILE"
+
+    for url in "${URLS[@]}"; do
+        echo "Downloading: $url"
+
+        # Download the cheat sheet
+	cheatsheet=$(curl -s "$url")
+
+        echo "$cheatsheet" >> "$VIM_FILE"
+    done
+
+    notify `basename "$0"` "Cheat sheet downloaded"
+}
+
+
+function display() {
+    sheet=$(cat "$VIM_FILE")
+    line=$(echo "$sheet" | rofi -dmenu -p "vim command" -i -font "mono 20" -width 100 -location 1 -lines 30) 
+    exit_code=$?
+
+    line=($line)
+}
+
+
+# Some simple argparsing
+if [[ "$1" =~ -D|--download ]]; then
+    download
+    exit 0
+elif [[ "$1" =~ -h|--help ]]; then
+    echo "usage: $0 [-D|--download]"
+    exit 0
+fi
+
+# Download the cheat sheet if it doesn't exist 
+if [ ! -f "$VIM_FILE" ]; then
+    download
+fi
+
+# display displays :)
+display
