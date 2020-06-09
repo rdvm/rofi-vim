@@ -28,3 +28,6 @@ by [tadly](https://gist.github.com/tadly) for using Rofi as an emoji picker.
 The script will download the cheat sheet file from this repo and cache it
 locally so it only needs to be downloaded once. You can also use the
 ``--download`` argument to refresh the cheat sheet in case it's changed.
+
+There is an optional `--dvim` argument if you want to use dmenu instead of
+Rofi, and if no argument is supplied it will use Rofi by default.

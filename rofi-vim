@@ -4,18 +4,18 @@
 #     1. Download Vim cheat sheet 
 #        $ rofi-vim --download
 #
-#     2. Run it!
+#     2. Use dmenu to open the cheat sheet
+#	 $ rofi-vim --dvim
+#
+#     3. Run it!
 #        $ rofi-vim
 #
 
 # Where to save the cheat sheet.
 VIM_FILE="$HOME/.cache/vimcheat.txt"
 
-# Urls of cheat sheet to download.
-# You can remove what you don't need.
-URLS=(
-    'https://raw.githubusercontent.com/rdvm/rofi-vim/master/vimcheat'
-)
+# Url of cheat sheet to download.
+URL=('https://raw.githubusercontent.com/rdvm/rofi-vim/master/vimcheat')
 
 
 function notify() {
@@ -30,20 +30,17 @@ function download() {
 
     echo "" > "$VIM_FILE"
 
-    for url in "${URLS[@]}"; do
-        echo "Downloading: $url"
+    # Echo URL to terminal and download the cheat sheet
+    echo "Downloading: $URL"
+    cheatsheet=$(curl -s "$URL")
 
-        # Download the cheat sheet
-	cheatsheet=$(curl -s "$url")
-
-        echo "$cheatsheet" >> "$VIM_FILE"
-    done
+    echo "$cheatsheet" >> "$VIM_FILE"
 
     notify `basename "$0"` "Cheat sheet downloaded"
 }
 
 
-function display() {
+function rvim() {
     sheet=$(cat "$VIM_FILE")
     line=$(echo "$sheet" | rofi -dmenu -p "vim command" -i -font "mono 20" -width 100 -location 1 -lines 30) 
     exit_code=$?
@@ -51,20 +48,27 @@ function display() {
     line=($line)
 }
 
+function dvim() {
+    sheet=$(cat "$VIM_FILE")
+    line=$(echo "$sheet" | dmenu -fn "mono 20" -p "vim command" -i -l 30) 
+    exit_code=$?
 
-# Some simple argparsing
-if [[ "$1" =~ -D|--download ]]; then
-    download
-    exit 0
-elif [[ "$1" =~ -h|--help ]]; then
-    echo "usage: $0 [-D|--download]"
-    exit 0
-fi
+    line=($line)
+}
+
+case $1 in
+--download)
+	download
+	;;
+--dvim)
+	dvim
+	;;
+*)
+	rvim
+	;;
+esac
 
 # Download the cheat sheet if it doesn't exist 
 if [ ! -f "$VIM_FILE" ]; then
     download
 fi
-
-# display displays :)
-display
