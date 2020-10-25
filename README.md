@@ -22,7 +22,7 @@ curl -s https://raw.githubusercontent.com/rdvm/rofi-vim/master/vimcheat | dmenu 
 The `rofi-vim` file in this repository is the script I use on my system to
 launch the cheat sheet. The structure of the script was copied from [this
 gist](https://gist.github.com/tadly/0741821d3694deaec1ee454a95c591fa) created
-by [tadly](https://gist.github.com/tadly) for using Rofi as an emoji picker.
+by [**@tadly**](https://github.com/tadly) for using Rofi as an emoji picker.
 :grinning:
 
 The script will download the cheat sheet file from this repo and cache it
