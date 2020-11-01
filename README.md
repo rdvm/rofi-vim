@@ -2,7 +2,7 @@
 ## A Vim cheat sheet for _Rofi_ or _dmenu_
 
 I wanted to create a quick searchable Vim cheat sheet, and I decided to use a
-text file as the cheat sheet and then pipe that to a Rofi dmenu.
+text file as the cheat sheet and then pipe that to a _Rofi_ dmenu.
 
 ## Example
 If you have _Rofi_ installed you can try it out like this:
