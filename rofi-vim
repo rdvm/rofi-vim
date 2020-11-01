@@ -14,6 +14,9 @@
 # Where to save the cheat sheet.
 VIM_FILE="$HOME/.cache/vimcheat.txt"
 
+# Get current time
+CURRENT_TIME=$(date +%s)
+
 # Url of cheat sheet to download.
 URL=('https://raw.githubusercontent.com/rdvm/rofi-vim/master/vimcheat')
 
@@ -39,6 +42,10 @@ function download() {
     notify `basename "$0"` "Cheat sheet downloaded"
 }
 
+# Download the cheat sheet if it doesn't exist or is older than 5 days
+if [ ! -f "$VIM_FILE" ] || [ $((CURRENT_TIME - `stat -c %Y $VIM_FILE`)) -gt 432000 ]; then
+    download
+fi
 
 function rvim() {
     sheet=$(cat "$VIM_FILE")
@@ -67,8 +74,3 @@ case $1 in
 	rvim
 	;;
 esac
-
-# Download the cheat sheet if it doesn't exist 
-if [ ! -f "$VIM_FILE" ]; then
-    download
-fi
